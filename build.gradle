@@ -4,6 +4,14 @@ plugins {
     id 'java'
 }
 
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'com.matsta25.restapi.RestapiApplication'
+        )
+    }
+}
+
 group = 'com.matsta25'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
