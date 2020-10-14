@@ -1,11 +1,10 @@
 package com.matsta25.restapi.controller;
 
+import com.matsta25.restapi.dto.PostDto;
 import com.matsta25.restapi.model.Post;
 import com.matsta25.restapi.service.PostService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,9 +20,17 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<Post> getPosts() {
-        return postService.getPosts();
+    public List<PostDto> getPosts(@RequestParam(required = false) int page, Sort.Direction sort) {
+        int pageNumber = page > 0 ? page : 0;
+        return PostDtoMapper.mapToPostDtos(postService.getPosts(pageNumber, sort));
     }
+
+    @GetMapping("/posts/comments")
+    public List<Post> getPostsWithComments(@RequestParam(required = false) int page , Sort.Direction sort) {
+        int pageNumber = page > 0 ? page : 0;
+        return postService.getPostsWithComments(pageNumber, sort);
+    }
+
 
     @GetMapping("/posts/{id}")
     public Post getSinglePosts(@PathVariable long id) {
