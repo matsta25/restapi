@@ -3,7 +3,11 @@ package com.matsta25.restapi.controller;
 import com.matsta25.restapi.dto.PostDto;
 import com.matsta25.restapi.model.Post;
 import com.matsta25.restapi.service.PostService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +18,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class PostController {
 
+    Logger logger = LoggerFactory.getLogger(PostController.class);
+
     private PostService postService;
 
     public PostController(PostService postService) {
@@ -21,7 +27,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<PostDto> getPosts(@RequestParam(required = false) Integer page, Sort.Direction sort) {
+    public List<PostDto> getPosts(@RequestParam(required = false) Integer page, Sort.Direction sort,
+                                  @AuthenticationPrincipal UsernamePasswordAuthenticationToken user) {
+        logger.info("User: " + user.getPrincipal() + ", Role: " + user.getAuthorities() + ", called /api/posts");
         int pageNumber = page != null && page >= 0 ? page : 0;
         Sort.Direction sortDirection = sort != null ? sort : Sort.Direction.ASC;
         return PostDtoMapper.mapToPostDtos(postService.getPosts(pageNumber, sortDirection));
