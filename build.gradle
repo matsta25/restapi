@@ -22,11 +22,6 @@ configurations {
     }
 }
 
-java {
-    sourceCompatibility = JavaVersion.toVersion('8')
-    targetCompatibility = JavaVersion.toVersion('8')
-}
-
 //compileJava {
 //    options.compilerArgs << '-parameters'
 //}
